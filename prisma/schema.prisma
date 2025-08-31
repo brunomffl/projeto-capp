@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id           String     @id @default(uuid())
+  firebase_uid String     @unique
+  email        String     @unique
+  papel        String
+  professor    Professor?
+}
+
+model Professor {
+  id           String    @id @default(uuid())
+  usuario_id   String    @unique
+  nome         String
+  cpf          String? // opcional
+  data_criacao DateTime  @default(now())
+  usuario      Usuario   @relation(fields: [usuario_id], references: [id])
+  oficinas     Oficina[]
+}
+
+model Aluno {
+  id              String             @id @default(uuid())
+  oficina_id      String
+  nome            String
+  data_nascimento DateTime
+  ativo           Boolean            @default(true)
+  oficina         Oficina            @relation(fields: [oficina_id], references: [id])
+  frequencias     Frequencia[]
+  pareceres       Parecer[]
+  historico       HistoricoOficina[]
+}
+
+model Oficina {
+  id             String             @id @default(uuid())
+  professor_id   String
+  nome           String
+  dia_semana     String
+  horario_inicio DateTime
+  horario_fim    DateTime
+  professor      Professor          @relation(fields: [professor_id], references: [id])
+  alunos         Aluno[]
+  historico      HistoricoOficina[]
+}
+
+model Frequencia {
+  id       String   @id @default(uuid())
+  aluno_id String
+  data     DateTime
+  presente Boolean
+  aluno    Aluno    @relation(fields: [aluno_id], references: [id])
+}
+
+model Parecer {
+  id               String   @id @default(uuid())
+  aluno_id         String
+  texto_parecer    String
+  ano              Int
+  data_atualizacao DateTime @default(now())
+  aluno            Aluno    @relation(fields: [aluno_id], references: [id])
+}
+
+model HistoricoOficina {
+  id           String    @id @default(uuid())
+  aluno_id     String
+  oficina_id   String
+  data_entrada DateTime
+  data_saida   DateTime?
+  aluno        Aluno     @relation(fields: [aluno_id], references: [id])
+  oficina      Oficina   @relation(fields: [oficina_id], references: [id])
+}
