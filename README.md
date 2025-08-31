@@ -10,18 +10,18 @@
     Link: https://www.docker.com/get-started/
 
 2. Verificar se a instalação do Docker e Docker Compose funcionou rodando os comandos no terminal no vscode
-    ´´´´bash
+    ```bash
     docker --version
     docker compose version
 
 3. Se os comandos retornarem as versões, pode seguir com rodando o seguinte comando:
-    ´´´´bash
+    ```bash
     docker compose up -d
 
 > Esse comando vai fazer a criação do container do banco de dados no docker. 
 
 4. Verifique se o container foi criado certo rodando o seguinte comando:
-    ´´´´bash
+    ```bash
     docker ps -a
 
 > Se aparecer algo assim:
@@ -32,4 +32,8 @@ CONTAINER ID   IMAGE      COMMAND      CREATED     STATUS      PORTS        NAME
 Deu certo!
 
 5. Agora, crie na raíz do projeto um arquivo .env que contenha isso:
-    DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+    DATABASE_URL="postgresql://abex:abexcapp@localhost:5432/api-capp?schema=public"
+
+6. Depois de ter adicionado o .env, podemos rodar as migrations, para que nosso banco de dados crie as tabelas
+    ```bash
+    npx prisma migrate dev --name create_tables
