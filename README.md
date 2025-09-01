@@ -37,3 +37,8 @@ Deu certo!
 6. Depois de ter adicionado o .env, podemos rodar as migrations, para que nosso banco de dados crie as tabelas
     ```bash
     npx prisma migrate dev --name create_tables
+
+7. Rodar o server para testar as rotas.
+   ```bash
+   node src/server.js
+   
