@@ -7,7 +7,7 @@ class AuthService {
         return getAuth().createUser({
             email: professor.email,
             displayName: professor.nome,
-            password: professor.password
+            password: professor.password,
         });
     }
 }

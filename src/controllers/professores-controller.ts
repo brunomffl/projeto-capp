@@ -18,7 +18,7 @@ class ProfessorControllers {
 
         await this.professorServices.create(professor);
 
-        return res.status(201).json({ message: "Usuário criado com sucesso!" });
+        return res.status(201).json({ message: "Professor criado com sucesso!" });
     }
 }
 

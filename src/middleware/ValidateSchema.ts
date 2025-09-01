@@ -5,7 +5,7 @@ import { ParsedQs } from "qs";
 
 type ValidationTarget = "body" | "params" | "query";
 
-function validate(schema: z.ZodSchema, target: ValidationTarget = "body") {
+function validate(schema: z.ZodSchema, target: ValidationTarget) {
     return (req: Request, res: Response, next: NextFunction) => {
         try {
             let dataToValidate;
