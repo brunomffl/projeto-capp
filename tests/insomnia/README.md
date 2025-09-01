@@ -4,7 +4,7 @@
 
 1. Abra o Insomnia
 2. Vá em **Application** > **Preferences** > **Data** > **Import Data**
-3. Selecione o arquivo `cruds-insomnia.json`
+3. Selecione o arquivo `full-collection.json`
 4. Pronto! Todas as rotas estarão disponíveis
 
 ## Collections disponíveis:
