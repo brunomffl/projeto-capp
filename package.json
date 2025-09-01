@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "description": "> **Future Skills** - Plataforma Web para Gestão Educacional",
-  "main": "index.js",
+  "main": "server.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx --env-file=.env --watch src/server.ts"
   },
   "license": "ISC",
   "dependencies": {

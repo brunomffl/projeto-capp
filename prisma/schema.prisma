@@ -7,11 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Papel {
+  admin
+  professor
+  aluno
+}
+
 model Usuario {
   id           String     @id @default(uuid())
   firebase_uid String     @unique
   email        String     @unique
-  papel        String
+  papel        Papel
   professor    Professor?
 }
 
