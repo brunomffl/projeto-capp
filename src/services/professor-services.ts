@@ -2,7 +2,7 @@ import { Professor } from "@prisma/client";
 import { prisma } from "@/database/prisma";
 import { AppError } from "@/utils/AppError";
 import { AuthService } from "./auth-service";
-import { CreateProfessorData } from "@/schemas/professor-schema";
+import { CreateProfessorData, UpdateProfessorData } from "@/schemas/professor-schema";
 
 class ProfessorServices {
     private authService: AuthService;
@@ -40,6 +40,66 @@ class ProfessorServices {
             },
             include: { professor: true }
         })
+    }
+
+    async update(id: string, professor: UpdateProfessorData): Promise<void>{
+        const user = await prisma.usuario.findFirst({
+            where: {
+                firebase_uid: id
+            }
+        });
+
+        if(!user){
+            throw new AppError("Usuário não encontrado!", 404);
+        }
+
+        await this.authService.update(id, professor);
+
+        const { password, ...professorData } = professor;
+        
+        await prisma.usuario.update({
+            where: {
+                firebase_uid: id
+            },
+            data: {
+                ...(professorData.email && { email: professorData.email }),
+                professor: {
+                    update: {
+                        ...(professorData.nome && { nome: professorData.nome }),
+                        ...(professorData.cpf && { cpf: professorData.cpf })
+                    }
+                }
+            },
+            include: { professor: true }
+        });
+    }
+
+    async delete(id: string){
+        const user = await prisma.usuario.findFirst({
+            where: {
+                firebase_uid: id
+            }
+        });
+
+        if(!user){
+            throw new AppError("Usuário não encontrado!", 404);
+        };
+        //deleta professor
+        await prisma.professor.delete({
+            where: {
+                usuario_id: user.id
+            }
+        })
+        //deleta usuário
+        await prisma.usuario.delete({
+            where: {
+                firebase_uid: id
+            },
+            include: { professor: true }
+        });
+        //deleta no firebase
+        await this.authService.delete(id);
+
     }
 };
 

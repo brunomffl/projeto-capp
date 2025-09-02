@@ -20,6 +20,23 @@ class ProfessorControllers {
 
         return res.status(201).json({ message: "Professor criado com sucesso!" });
     }
+
+    async update(req: Request, res: Response){
+        const { id } = req.params;
+        const professor = req.body;
+
+        await this.professorServices.update(id, professor);
+
+        return res.status(204).end();
+    }
+
+    async delete(req: Request, res: Response){
+        const { id } = req.params;
+
+        await this.professorServices.delete(id);
+
+        return res.status(204).end();
+    }
 }
 
 export { ProfessorControllers };

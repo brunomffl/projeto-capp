@@ -15,7 +15,7 @@ export function ErrorHandling(error: any, req: Request, res: Response, next: Nex
     };
 
     if(error.code === "auth/email-already-exists"){
-        return res.json(400).json({ message: "E-mail já cadastrado!" });
+        return res.status(400).json({ message: "E-mail já cadastrado!" });
     };
 
     return res.status(500).json({ message: error.message });
