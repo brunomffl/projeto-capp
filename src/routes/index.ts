@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { professorRoutes } from "./professores-routes";
-import { ensureAuthenticated } from "@/middleware/ensure-authenticated";
+import { ensureAuthenticated } from "@/middleware/ensureAuthenticated";
 
 const routes = Router();
 
