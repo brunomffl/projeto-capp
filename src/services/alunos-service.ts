@@ -41,6 +41,22 @@ class AlunosService {
             }
         });
     }
+
+    async delete(id: string): Promise<void>{
+        const aluno = await prisma.usuario.findFirst({
+            where: {
+                id
+            }
+        });
+
+        if(!aluno){
+            throw new AppError("Aluno não encontrado!", 404);
+        };
+
+        await prisma.aluno.delete({
+            where: { id }
+        });
+    }
 };
 
 export { AlunosService };
