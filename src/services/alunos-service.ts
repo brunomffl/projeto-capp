@@ -40,10 +40,30 @@ class AlunosService {
                 oficina_id: aluno.oficina_id,
             }
         });
-    }
+    };
+
+    async update(id: string, alunoData: UpdateAlunoSchema): Promise<void>{
+        const aluno = await prisma.aluno.findFirst({
+            where: { id },
+        });
+
+        if(!aluno){
+            throw new AppError("Aluno não encontrado!", 404);
+        };
+
+        await prisma.aluno.update({
+            where: { id },
+            data: {
+                ...(alunoData.nome && { nome: alunoData.nome }),
+                ...(alunoData.data_nascimento && { data_nascimento: alunoData.data_nascimento }),
+                ...(alunoData.oficina_id && { oficina_id: alunoData.oficina_id }),
+                ...(alunoData.ativo && { ativo: alunoData.ativo })
+            }
+        })
+    };
 
     async delete(id: string): Promise<void>{
-        const aluno = await prisma.usuario.findFirst({
+        const aluno = await prisma.aluno.findFirst({
             where: {
                 id
             }
@@ -56,7 +76,7 @@ class AlunosService {
         await prisma.aluno.delete({
             where: { id }
         });
-    }
+    };
 };
 
 export { AlunosService };

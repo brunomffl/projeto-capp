@@ -21,6 +21,15 @@ class AlunosController {
         return res.status(201).json({ message: "Aluno criado com sucesso!" });
     };
 
+    async update(req: Request, res: Response){
+        const { id } = req.params;
+        const aluno = req.body
+
+        await this.alunosServices.update(id, aluno);
+
+        return res.status(200).end();
+    }
+
     async delete(req: Request, res: Response){
         const { id } = req.params;
 
