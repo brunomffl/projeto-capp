@@ -2,13 +2,13 @@ import { z } from "zod";
 
 export const createAlunoSchema = z.object({
     nome: z.string().min(3, { error: "Nome precisa ter no mínimo 3 caracteres" }),
-    data_nascimento: z.date(),
+    data_nascimento: z.coerce.date(),
     oficina_id: z.string()
 });
 
 export const updateAlunoSchema = z.object({
     nome: z.string().min(3, { error: "Nome precisa ter no mínimo 3 caracteres" }).optional(),
-    data_nascimento: z.date().optional(),
+    data_nascimento: z.coerce.date().optional(),
     oficina_id: z.string().optional(),
     ativo: z.boolean().optional()
 });

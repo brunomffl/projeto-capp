@@ -7,23 +7,23 @@ const professorRoutes = Router();
 const professorControllers = new ProfessorControllers();
 
 professorRoutes.get("/", 
-    professorControllers.index.bind(professorControllers
-));
+    professorControllers.index.bind(professorControllers)
+);
 
-professorRoutes.post("/", 
+professorRoutes.post("/",
     validateBody(createProfessorSchema),
-    professorControllers.create.bind(professorControllers
-));
+    professorControllers.create.bind(professorControllers)
+);
 
 professorRoutes.put("/:id", 
     validateParams(deleteProfessorSchema), 
     validateBody(updateProfessorSchema), 
-    professorControllers.update.bind(professorControllers
-));
+    professorControllers.update.bind(professorControllers)
+);
 
 professorRoutes.delete("/:id", 
     validateParams(deleteProfessorSchema), 
-    professorControllers.delete.bind(professorControllers
-));
+    professorControllers.delete.bind(professorControllers)
+);
 
 export { professorRoutes };

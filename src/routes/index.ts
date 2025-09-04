@@ -1,14 +1,13 @@
 import { Router } from "express";
+import { alunosRoutes } from "./alunos-routes";
 import { professorRoutes } from "./professores-routes";
 import { ensureAuthenticated } from "@/middleware/ensureAuthenticated";
 
 const routes = Router();
 
-//rotas públicas
-// - login -
-
 //rotas protegidas
-routes.use(ensureAuthenticated);
+//routes.use(ensureAuthenticated);
 routes.use("/professores", professorRoutes);
+routes.use("/alunos", alunosRoutes);
 
 export { routes };
