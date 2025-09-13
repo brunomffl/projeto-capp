@@ -33,12 +33,13 @@ Deu certo!
 
 5. Agora, crie na raíz do projeto um arquivo .env que contenha isso:
     DATABASE_URL="postgresql://abex:abexcapp@localhost:5432/api-capp?schema=public"
+    PORT=3000
 
-6. Depois de ter adicionado o .env, podemos rodar as migrations, para que nosso banco de dados crie as tabelas
+7. Depois de ter adicionado o .env, podemos rodar as migrations, para que nosso banco de dados crie as tabelas
     ```bash
     npx prisma migrate dev --name create_tables
 
-7. Rodar o server para testar as rotas.
+8. Rodar o server para testar as rotas.
    ```bash
-   node src/server.js
+    npm run dev
    
