@@ -1,18 +1,34 @@
 import { Aluno } from "@prisma/client";
 import { prisma } from "@/database/prisma";
 import { AppError } from "@/utils/AppError";
-import { createAlunoSchema, UpdateAlunoSchema, DeleteAlunoSchema, CreateAlunoSchema } from "@/schemas/alunos-schema";
+import { CreateAlunoSchema, UpdateAlunoSchema } from "@/schemas/alunos-schema";
+import { PaginateSchema } from "@/schemas/paginate-schema";
 
 class AlunosService {
 
-    async index(): Promise<Aluno[]>{
-        const alunos = await prisma.aluno.findMany();
+    async index(pagination: PaginateSchema): Promise<{alunos: Aluno[], paginationProps: { page: number, perPage: number, totalRecords: number, totalPages: number }}>{
+        const skip = (pagination.page - 1) * pagination.perPage;
+
+        const alunos = await prisma.aluno.findMany({
+            skip,
+            take: pagination.perPage,
+            orderBy: { nome: "desc" }
+        });
+
+        const totalRecords = await prisma.aluno.count();
+        const totalPages = Math.ceil(totalRecords / pagination.perPage);
 
         if (alunos.length === 0){
             throw new AppError("Nenhum aluno cadastrado!", 404);
         };
 
-        return alunos;
+        return { 
+            alunos, 
+            paginationProps: { 
+                page: pagination.page , 
+                perPage: pagination.perPage, 
+                totalRecords, 
+                totalPages: totalPages > 0 ? totalPages : 1 } };
     };
 
     async create(aluno: CreateAlunoSchema): Promise<void>{
@@ -65,7 +81,7 @@ class AlunosService {
     async delete(id: string): Promise<void>{
         const aluno = await prisma.aluno.findFirst({
             where: {
-                id
+                id: id
             }
         });
 

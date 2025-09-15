@@ -2,6 +2,7 @@ import { Professor } from "@prisma/client";
 import { prisma } from "@/database/prisma";
 import { AppError } from "@/utils/AppError";
 import { AuthService } from "./auth-service";
+import { PaginateSchema } from "@/schemas/paginate-schema";
 import { CreateProfessorData, UpdateProfessorData } from "@/schemas/professor-schema";
 
 class ProfessorServices {
@@ -11,14 +12,31 @@ class ProfessorServices {
         this.authService = new AuthService();
     }
 
-    async index(): Promise<Professor[]>{
-        const professores = await prisma.professor.findMany();
+    async index(pagination: PaginateSchema): Promise<{ professores: Professor[], paginationProps: { page: number, perPage: number, totalRecords: number, totalPages: number } }>{
+        const skip = (pagination.page - 1) * pagination.perPage;
+
+        const professores = await prisma.professor.findMany({
+            skip,
+            take: pagination.perPage,
+            orderBy: { nome: "desc" }
+        });
+
+        const totalRecords = await prisma.professor.count();
+        const totalPages = Math.ceil(totalRecords / pagination.perPage);
 
         if(professores.length === 0){
             throw new AppError("Nenhum professor cadastrado!");
         };
 
-        return professores;
+        return { 
+            professores,
+            paginationProps: {
+                page: pagination.page,
+                perPage: pagination.page,
+                totalRecords,
+                totalPages
+            }
+        };
     };
 
     async create(professor: CreateProfessorData): Promise<void>{

@@ -10,7 +10,12 @@ class AlunosController {
     }
 
     async index(req: Request, res: Response){
-        return res.status(200).json(await this.alunosServices.index());
+        const { page = '1', perPage = '10' } = req.query;
+        const pagination = {
+            page: Number(page),
+            perPage: Number(perPage)
+        }
+        return res.status(200).json(await this.alunosServices.index(pagination));
     };
 
     async create(req: Request, res: Response){

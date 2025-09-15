@@ -20,7 +20,6 @@ alunosRoutes.put("/",
     alunosController.update.bind(alunosController)
 );
 
-
 alunosRoutes.delete("/",
     validateBody(deleteAlunoSchema),
     alunosController.delete.bind(alunosController),
