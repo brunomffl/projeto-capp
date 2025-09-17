@@ -44,15 +44,19 @@ model Aluno {
 }
 
 model Oficina {
-  id             String             @id @default(uuid())
-  professor_id   String
-  nome           String
-  dia_semana     String
-  horario_inicio DateTime
-  horario_fim    DateTime
-  professor      Professor          @relation(fields: [professor_id], references: [id])
-  alunos         Aluno[]
-  historico      HistoricoOficina[]
+  id          String   @id @default(uuid())
+  titulo      String
+  descricao   String
+  instrutorId String
+  dataInicio  DateTime
+  dataFim     DateTime
+  capacidade  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  instrutor User @relation(fields: [instrutorId], references: [id])
+  alunos    User[] @relation("OficinasInscricoes")
 }
 
 model Frequencia {
