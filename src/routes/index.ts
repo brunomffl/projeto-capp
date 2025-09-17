@@ -10,5 +10,6 @@ const routes = Router();
 //routes.use(ensureAuthenticated);
 routes.use("/professores", professorRoutes);
 routes.use("/alunos", alunosRoutes);
+routes.use("/oficinas", oficinaRoutes);
 
 export { routes };
