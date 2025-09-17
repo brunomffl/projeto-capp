@@ -7,7 +7,7 @@ const oficinaRoutes = Router();
 const oficinaControllers = new OficinaControllers();
 
 oficinaRoutes.get("/", 
-    oficinaControllers.index.bind(OficinaControllers)
+    oficinaControllers.index.bind(oficinaControllers)
 );
 
 oficinaRoutes.post("/",
