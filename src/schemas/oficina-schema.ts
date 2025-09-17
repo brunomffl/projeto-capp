@@ -3,9 +3,9 @@ import { z } from "zod";
 export const createOficinaSchema = z.object({
   titulo: z.string().min(3, "Título muito curto"),
   descricao: z.string().min(10, "Descrição muito curta"),
-  instrutorId: z.string().uuid(),
-  dataInicio: z.string().transform((val) => new Date(val)),
-  dataFim: z.string().transform((val) => new Date(val)),
+  instrutorId: z.uuid(),
+  dataInicio: z.coerce.date(),
+  dataFim: z.coerce.date(),
   capacidade: z.number().positive(),
 });
 
@@ -13,8 +13,8 @@ export const updateOficinaSchema = z.object({
   titulo: z.string().min(3, "Título muito curto").optional(),
   descricao: z.string().min(10, "Descrição muito curta").optional(),
   instrutorId: z.string().uuid().optional(),
-  dataInicio: z.string().transform((val) => new Date(val)).optional(),
-  dataFim: z.string().transform((val) => new Date(val)).optional(),
+  dataInicio: z.coerce.date().optional(),
+  dataFim: z.coerce.date().optional(),
   capacidade: z.number().positive().optional(),
 });
 

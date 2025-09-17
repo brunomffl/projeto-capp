@@ -55,8 +55,9 @@ model Oficina {
   updatedAt   DateTime @updatedAt
 
   // Relacionamentos
-  instrutor User @relation(fields: [instrutorId], references: [id])
-  alunos    User[] @relation("OficinasInscricoes")
+  instrutor Professor          @relation(fields: [instrutorId], references: [id])
+  alunos    Aluno[]
+  historico HistoricoOficina[]
 }
 
 model Frequencia {
