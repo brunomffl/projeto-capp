@@ -12,7 +12,7 @@ export const createOficinaSchema = z.object({
 export const updateOficinaSchema = z.object({
   titulo: z.string().min(3, "Título muito curto").optional(),
   descricao: z.string().min(10, "Descrição muito curta").optional(),
-  instrutorId: z.string().uuid().optional(),
+  instrutorId: z.uuid().optional(),
   dataInicio: z.coerce.date().optional(),
   dataFim: z.coerce.date().optional(),
   capacidade: z.number().positive().optional(),
