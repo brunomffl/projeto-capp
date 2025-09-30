@@ -119,22 +119,50 @@ class OficinasService {
   }
 
   async inscrever(oficinaId: string, alunoId: string) {
-    const oficina = await prisma.oficina.findUnique({
-      where: { id: oficinaId },
-      include: { alunos: true },
+    const oficina = await prisma.oficina.findFirst({
+      where: {
+        id: oficinaId
+      }
     });
 
-    if (!oficina) throw new AppError("Oficina não encontrada");
+    if(!oficina){
+      throw new AppError("Oficina não encontrada", 404);
+    };
 
-    return prisma.oficina.update({
-      where: { id: oficinaId },
-      data: {
-        alunos: {
-          connect: { id: alunoId },
-        },
-      },
+    const aluno = await prisma.aluno.findFirst({
+      where: {
+        id: alunoId
+      }
     });
-  };
+
+    if(!aluno){
+      throw new AppError("Aluno não encontrado!", 404);
+    };
+
+    if(aluno.oficina_id === oficinaId){
+      throw new AppError("Aluno já está matriculado nesta oficina!", 400);
+    };
+
+    return prisma.aluno.update({
+      where: { id: alunoId },
+      data: { oficina_id: oficinaId },
+      include: {
+        oficina: {
+          select: {
+            id: true,
+            titulo: true,
+            instrutor: {
+              select: {
+                nome: true
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+
 }
 
 export { OficinasService };
