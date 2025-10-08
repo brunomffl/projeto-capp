@@ -3,13 +3,14 @@ import { alunosRoutes } from "./alunos-routes";
 import { professorRoutes } from "./professores-routes";
 import { oficinaRoutes } from "./oficina-routes";
 import { ensureAuthenticated } from "@/middleware/ensureAuthenticated";
+import { verifyUserAuthorization } from "@/middleware/verifyUserAuthorization";
 
 const routes = Router();
 
 //rotas protegidas
-//routes.use(ensureAuthenticated);
-routes.use("/professores", professorRoutes);
+routes.use(ensureAuthenticated);
+routes.use("/professores", verifyUserAuthorization(["admin"]),professorRoutes);
 routes.use("/alunos", alunosRoutes);
-routes.use("/oficinas", oficinaRoutes);
+routes.use("/oficinas", verifyUserAuthorization(["admin"]), oficinaRoutes);
 
 export { routes };

@@ -1,0 +1,3 @@
+Admin geral do sistema:
+email: admin@capp.com
+senha: admin123

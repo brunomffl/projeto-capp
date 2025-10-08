@@ -2,6 +2,8 @@ import { Router } from "express";
 import { validateBody, validateParams } from "@/middleware/ValidateSchema";
 import { ProfessorControllers } from "@/controllers/professores-controller";
 import { createProfessorSchema, deleteProfessorSchema, updateProfessorSchema } from "@/schemas/professor-schema";
+import { ensureAuthenticated } from "@/middleware/ensureAuthenticated";
+import { verifyUserAuthorization } from "@/middleware/verifyUserAuthorization";
 
 const professorRoutes = Router();
 const professorControllers = new ProfessorControllers();
