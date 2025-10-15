@@ -39,6 +39,7 @@ model Aluno {
   ativo           Boolean            @default(true)
   oficina         Oficina            @relation(fields: [oficina_id], references: [id])
   frequencias     Frequencia[]
+  presencas       Presenca[]
   pareceres       Parecer[]
   historico       HistoricoOficina[]
 }
@@ -54,9 +55,9 @@ model Oficina {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // Relacionamentos
   instrutor Professor          @relation(fields: [instrutorId], references: [id])
   alunos    Aluno[]
+  aulas     Aula[]
   historico HistoricoOficina[]
 }
 
@@ -85,4 +86,40 @@ model HistoricoOficina {
   data_saida   DateTime?
   aluno        Aluno     @relation(fields: [aluno_id], references: [id])
   oficina      Oficina   @relation(fields: [oficina_id], references: [id])
+}
+
+model Aula {
+  id         String   @id @default(uuid())
+  oficina_id String
+  titulo     String
+  descricao  String?
+  data       DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  oficina   Oficina    @relation(fields: [oficina_id], references: [id])
+  presencas Presenca[]
+
+  @@map("aulas")
+}
+
+model Presenca {
+  id         String         @id @default(uuid())
+  aula_id    String
+  aluno_id   String
+  status     StatusPresenca @default(AUSENTE)
+  created_at DateTime       @default(now())
+  updated_at DateTime       @updatedAt
+
+  aula  Aula  @relation(fields: [aula_id], references: [id])
+  aluno Aluno @relation(fields: [aluno_id], references: [id])
+
+  @@unique([aula_id, aluno_id])
+  @@map("presencas")
+}
+
+enum StatusPresenca {
+  PRESENTE
+  AUSENTE
+  JUSTIFICADA
 }
