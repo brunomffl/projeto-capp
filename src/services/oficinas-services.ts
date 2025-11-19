@@ -6,10 +6,20 @@ import { PaginateSchema } from "@/schemas/paginate-schema";
 
 class OficinasService {
 
-    async index(pagination: PaginateSchema): Promise<{ oficinas: Oficina[], paginationProps: { page: number, perPage: number, totalRecords: number, totalPages: number } }> {
+    async index(pagination: PaginateSchema, professorUid?: string): Promise<{ oficinas: Oficina[], paginationProps: { page: number, perPage: number, totalRecords: number, totalPages: number } }> {
       const skip = (pagination.page - 1) * pagination.perPage;
 
+      // Se for professor, filtrar apenas suas oficinas
+      const whereClause = professorUid ? {
+        instrutor: {
+          usuario: {
+            firebase_uid: professorUid
+          }
+        }
+      } : {};
+
       const oficinas = await prisma.oficina.findMany({
+        where: whereClause,
         skip,
         take: pagination.perPage,
         include: {
@@ -21,14 +31,16 @@ class OficinasService {
             }
           }
         },
-        orderBy: { titulo: "desc" }
+        orderBy: { titulo: "asc" }
       });
 
       if (oficinas.length === 0){
-          throw new AppError("Nenhuma oficina cadastrada!", 404);
+          throw new AppError("Nenhuma oficina encontrada!", 404);
       };
 
-      const totalRecords = await prisma.oficina.count();
+      const totalRecords = await prisma.oficina.count({
+        where: whereClause
+      });
       const totalPages = Math.ceil(totalRecords / pagination.perPage); 
 
       return { 

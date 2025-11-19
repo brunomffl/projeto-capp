@@ -14,8 +14,12 @@ class AlunosController {
         const pagination = {
             page: Number(page),
             perPage: Number(perPage)
-        }
-        return res.status(200).json(await this.alunosServices.index(pagination));
+        };
+        
+        // Se for professor, filtrar apenas seus alunos
+        const professorUid = req.user?.role === 'professor' ? req.user.uid : undefined;
+        
+        return res.status(200).json(await this.alunosServices.index(pagination, professorUid));
     };
 
     async create(req: Request, res: Response){

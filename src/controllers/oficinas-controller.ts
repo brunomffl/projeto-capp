@@ -15,9 +15,12 @@ class OficinaControllers {
         const pagination = {
             page: Number(page),
             perPage: Number(perPage)
-        }
+        };
 
-        return res.status(200).json(await this.oficinasService.index(pagination));
+        // Se for professor, filtrar apenas suas oficinas
+        const professorUid = req.user?.role === 'professor' ? req.user.uid : undefined;
+
+        return res.status(200).json(await this.oficinasService.index(pagination, professorUid));
     };
 
     async create(req: Request, res: Response){

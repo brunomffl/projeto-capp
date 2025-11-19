@@ -70,12 +70,26 @@ model Frequencia {
 }
 
 model Parecer {
-  id               String   @id @default(uuid())
+  id               String        @id @default(uuid())
   aluno_id         String
   texto_parecer    String
   ano              Int
-  data_atualizacao DateTime @default(now())
-  aluno            Aluno    @relation(fields: [aluno_id], references: [id])
+  status           StatusParecer @default(RASCUNHO)
+  google_doc_id    String?
+  google_doc_url   String?
+  data_criacao     DateTime      @default(now())
+  data_atualizacao DateTime      @updatedAt
+  data_publicacao  DateTime?
+  aluno            Aluno         @relation(fields: [aluno_id], references: [id])
+
+  @@unique([aluno_id, ano])
+  @@map("pareceres")
+}
+
+enum StatusParecer {
+  RASCUNHO
+  PUBLICADO
+  FINALIZADO
 }
 
 model HistoricoOficina {

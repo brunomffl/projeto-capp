@@ -6,20 +6,43 @@ import { PaginateSchema } from "@/schemas/paginate-schema";
 
 class AlunosService {
 
-    async index(pagination: PaginateSchema): Promise<{alunos: Aluno[], paginationProps: { page: number, perPage: number, totalRecords: number, totalPages: number }}>{
+    async index(pagination: PaginateSchema, professorUid?: string): Promise<{alunos: Aluno[], paginationProps: { page: number, perPage: number, totalRecords: number, totalPages: number }}>{
         const skip = (pagination.page - 1) * pagination.perPage;
 
+        // Se for professor, filtrar apenas alunos de suas oficinas
+        const whereClause = professorUid ? {
+            oficina: {
+                instrutor: {
+                    usuario: {
+                        firebase_uid: professorUid
+                    }
+                }
+            },
+            ativo: true
+        } : { ativo: true };
+
         const alunos = await prisma.aluno.findMany({
+            where: whereClause,
             skip,
             take: pagination.perPage,
-            orderBy: { nome: "desc" }
+            orderBy: { nome: "asc" },
+            include: {
+                oficina: {
+                    select: {
+                        titulo: true
+                    }
+                }
+            }
         });
 
-        const totalRecords = await prisma.aluno.count();
+        const totalRecords = await prisma.aluno.count({
+            where: whereClause
+        });
+        
         const totalPages = Math.ceil(totalRecords / pagination.perPage);
 
         if (alunos.length === 0){
-            throw new AppError("Nenhum aluno cadastrado!", 404);
+            throw new AppError("Nenhum aluno encontrado!", 404);
         };
 
         return { 
