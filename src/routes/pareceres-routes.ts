@@ -18,6 +18,12 @@ const pareceresController = new PareceresController();
 pareceresRoutes.use(ensureAuthenticated);
 pareceresRoutes.use(verifyUserAuthorization(["professor"]));
 
+// GET /pareceres/google-auth - Verificar status da autenticação Google
+pareceresRoutes.get(
+    "/google-auth",
+    pareceresController.checkGoogleAuth.bind(pareceresController)
+);
+
 // POST /pareceres - Criar novo parecer
 pareceresRoutes.post(
     "/",
@@ -59,6 +65,20 @@ pareceresRoutes.delete(
     "/:id",
     validateParams(parecerParamsSchema),
     pareceresController.delete.bind(pareceresController)
+);
+
+// POST /pareceres/:id/publicar - Publicar parecer no Google Docs
+pareceresRoutes.post(
+    "/:id/publicar",
+    validateParams(parecerParamsSchema),
+    pareceresController.publicarNoGoogleDocs.bind(pareceresController)
+);
+
+// POST /pareceres/:id/finalizar - Finalizar parecer
+pareceresRoutes.post(
+    "/:id/finalizar",
+    validateParams(parecerParamsSchema),
+    pareceresController.finalizarParecer.bind(pareceresController)
 );
 
 export { pareceresRoutes };

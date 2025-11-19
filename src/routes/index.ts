@@ -5,10 +5,15 @@ import { oficinaRoutes } from "./oficina-routes";
 import { aulasRoutes } from "./aulas-routes";
 import { presencasRoutes } from "./presencas-routes";
 import { pareceresRoutes } from "./pareceres-routes";
+import { authRoutes } from "./auth-routes";
 import { ensureAuthenticated } from "@/middleware/ensureAuthenticated";
 import { verifyUserAuthorization } from "@/middleware/verifyUserAuthorization";
 
 const routes = Router();
+
+// Rotas de autenticação Google (não protegidas)
+routes.use("/auth", authRoutes);
+// routes.use("/auth", oauth2Routes); // Temporariamente desabilitado
 
 //rotas protegidas
 routes.use(ensureAuthenticated);

@@ -85,4 +85,41 @@ export class PareceresController {
 
         return res.json(parecer);
     }
+
+    async publicarNoGoogleDocs(req: Request, res: Response) {
+        const { id } = req.params;
+        const professorUid = req.user?.uid!;
+
+        const parecer = await this.pareceresService.publicarNoGoogleDocs(id, professorUid);
+
+        return res.json({
+            message: "Parecer publicado no Google Docs com sucesso!",
+            parecer,
+            google_docs_url: parecer.google_doc_url
+        });
+    }
+
+    async finalizarParecer(req: Request, res: Response) {
+        const { id } = req.params;
+        const professorUid = req.user?.uid!;
+
+        const parecer = await this.pareceresService.finalizarParecer(id, professorUid);
+
+        return res.json({
+            message: "Parecer finalizado com sucesso!",
+            parecer
+        });
+    }
+
+    async checkGoogleAuth(req: Request, res: Response) {
+        const isAuthenticated = !!(global.oauthClient && global.oauthTokens);
+        
+        return res.json({
+            authenticated: isAuthenticated,
+            message: isAuthenticated 
+                ? "✅ Google Docs disponível - você pode publicar pareceres" 
+                : "❌ Faça login no Google para publicar pareceres",
+            loginUrl: isAuthenticated ? null : "/auth/google"
+        });
+    }
 }
