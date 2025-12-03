@@ -13,9 +13,8 @@ const routes = Router();
 
 // Rotas de autenticação Google (não protegidas)
 routes.use("/auth", authRoutes);
-// routes.use("/auth", oauth2Routes); // Temporariamente desabilitado
 
-//rotas protegidas
+// Rotas protegidas
 routes.use(ensureAuthenticated);
 
 routes.use("/professores", 
